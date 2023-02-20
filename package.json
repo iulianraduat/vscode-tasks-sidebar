@@ -2,7 +2,7 @@
   "name": "vscode-tasks-sidebar",
   "displayName": "VSCode Tasks in Sidebar",
   "description": "A Visual Studio Code extension to display all tasks recognized by VSCode in sidebar",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "icon": "images/logo.png",
   "license": "GPL-3.0",
   "publisher": "iulian-radu-at",
@@ -23,7 +23,7 @@
     "esbuild-base": "rimraf out && esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node",
     "esbuild": "npm run -S esbuild-base -- --sourcemap",
     "package": "vsce package",
-    "install:local": "code --profile React --install-extension vscode-tasks-sidebar-1.0.0.vsix",
+    "install:local": "code --profile React --install-extension vscode-tasks-sidebar-1.0.1.vsix",
     "compile": "npm run esbuild-base",
     "publish": "vsce publish",
     "esbuild-watch": "npm run -S esbuild-base -- --sourcemap --watch",
@@ -37,6 +37,7 @@
     "@types/glob": "^8.0.1",
     "@types/mocha": "^10.0.1",
     "@types/node": "16.x",
+    "@types/uuid": "^9.0.0",
     "@types/vscode": "^1.75.0",
     "@typescript-eslint/eslint-plugin": "^5.49.0",
     "@typescript-eslint/parser": "^5.49.0",
@@ -45,7 +46,8 @@
     "eslint": "^8.33.0",
     "glob": "^8.1.0",
     "mocha": "^10.1.0",
-    "typescript": "^4.9.4"
+    "typescript": "^4.9.4",
+    "uuid": "^9.0.0"
   },
   "categories": [
     "Other"

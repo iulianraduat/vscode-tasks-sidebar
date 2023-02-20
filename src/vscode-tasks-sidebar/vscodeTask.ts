@@ -1,5 +1,6 @@
 import * as vscode from 'vscode';
 import { VscodeGroup } from './vscodeGroup';
+import { v4 as uuidv4 } from 'uuid';
 
 export class VscodeTask extends vscode.TreeItem {
   private _isRunning: boolean;
@@ -10,7 +11,7 @@ export class VscodeTask extends vscode.TreeItem {
     public readonly parent?: VscodeGroup
   ) {
     super(task.name, vscode.TreeItemCollapsibleState.None);
-    this.id = task.name;
+    this.id = uuidv4();
     this.iconPath = new vscode.ThemeIcon(this.getIconPath());
     this.description = task.definition.type;
     this.type = task.definition.type;

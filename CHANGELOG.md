@@ -15,3 +15,17 @@ All notable changes to the "VSCode Tasks in Sidebar" extension will be documente
 ### Removed
 
 - Nothing
+
+## 1.0.1 (2023-02-20)
+
+### Added
+
+- Nothing
+
+### Changed
+
+- Fixed the problem with duplicate ids in tree view
+
+### Removed
+
+- Nothing
