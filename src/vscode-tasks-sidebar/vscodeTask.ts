@@ -13,7 +13,7 @@ export class VscodeTask extends vscode.TreeItem {
     super(task.name, vscode.TreeItemCollapsibleState.None);
     this.id = uuidv4();
     this.iconPath = new vscode.ThemeIcon(this.getIconPath());
-    this.description = task.definition.type;
+    this.description = task.source;
     this.type = task.definition.type;
     this.tooltip = task.detail;
     this.contextValue = 'vscodeTask';
