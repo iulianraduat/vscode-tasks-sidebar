@@ -2,7 +2,7 @@
   "name": "vscode-tasks-sidebar",
   "displayName": "VSCode Tasks in Sidebar",
   "description": "A Visual Studio Code extension to display all tasks recognized by VSCode in sidebar",
-  "version": "1.0.3",
+  "version": "1.1.0",
   "icon": "images/logo.png",
   "license": "GPL-3.0",
   "publisher": "iulian-radu-at",
@@ -23,7 +23,7 @@
     "esbuild-base": "rimraf out && esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node --target=es6",
     "esbuild": "npm run -S esbuild-base -- --sourcemap",
     "package": "vsce package",
-    "install:local": "code --profile React --install-extension vscode-tasks-sidebar-1.0.3.vsix",
+    "install:local": "code --install-extension vscode-tasks-sidebar-1.1.0.vsix",
     "compile": "npm run esbuild-base",
     "publish": "vsce publish",
     "esbuild-watch": "npm run -S esbuild-base -- --sourcemap --watch",
@@ -106,6 +106,19 @@
           "group": "navigation@3"
         }
       ]
-    }
+    },
+    "configuration": [
+      {
+        "title": "VSCode Tasks in Sidebar",
+        "properties": {
+          "vscodeTasksSidebar.defaultGrouped": {
+            "type": "boolean",
+            "default": false,
+            "description": "VSCode Tasks in Sidebar: initially shows all results grouped (otherwise as list)",
+            "scope": "resource"
+          }
+        }
+      }
+    ]
   }
 }

@@ -1,11 +1,12 @@
 import * as vscode from 'vscode';
+import { isResultGrouped } from './settings';
 import { VscodeGroup } from './vscodeGroup';
 import { VscodeTask } from './vscodeTask';
 
 export class VscodeTasksProvider
   implements vscode.TreeDataProvider<VscodeGroup | VscodeTask>
 {
-  private isGrouped: boolean = false;
+  private isGrouped: boolean = isResultGrouped();
   private cacheTasksList: VscodeTask[] | undefined;
   private cacheTasksGrouped: VscodeGroup[] | undefined;
 

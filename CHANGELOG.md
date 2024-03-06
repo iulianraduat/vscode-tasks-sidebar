@@ -58,3 +58,17 @@ All notable changes to the "VSCode Tasks in Sidebar" extension will be documente
 ### Removed
 
 - Nothing
+
+## 1.1.0 (2024-03-06)
+
+### Added
+
+- A setting to define the initial display of the results (list/grouped)
+
+### Changed
+
+- Nothing
+
+### Removed
+
+- Nothing

@@ -36,7 +36,10 @@ There are no special requirements.
 
 ## Extension Settings
 
-None
+- vscodeTasksSidebar.defaultGrouped:
+
+  - VSCode Tasks in Sidebar: initially shows all results grouped (otherwise as list)
+  - default false
 
 ## Known Issues
 
