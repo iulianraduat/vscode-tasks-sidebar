@@ -2,17 +2,20 @@
   "name": "vscode-tasks-sidebar",
   "displayName": "VSCode Tasks in Sidebar",
   "description": "A Visual Studio Code extension to display all tasks recognized by VSCode in sidebar",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "icon": "images/logo.png",
   "license": "GPL-3.0",
   "publisher": "iulian-radu-at",
   "homepage": "https://marketplace.visualstudio.com/items?itemName=iulian-radu-at.vscode-tasks-sidebar",
   "repository": {
     "type": "git",
-    "url": "https://github.com/iulian-radu-at/vscode-tasks-sidebar"
+    "url": "https://github.com/iulianraduat/vscode-tasks-sidebar"
+  },
+  "bugs": {
+    "url": "https://github.com/iulianraduat/vscode-tasks-sidebar/issues"
   },
   "sponsor": {
-    "url": "https://www.patreon.com/iulian_radu_at"
+    "url": "https://www.patreon.com/iulianraduat"
   },
   "engines": {
     "vscode": "^1.75.0"
@@ -23,7 +26,7 @@
     "esbuild-base": "rimraf out && esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node --target=es6",
     "esbuild": "npm run -S esbuild-base -- --sourcemap",
     "package": "vsce package",
-    "install:local": "code --install-extension vscode-tasks-sidebar-1.1.0.vsix",
+    "install:local": "code --install-extension vscode-tasks-sidebar-1.1.1.vsix",
     "compile": "npm run esbuild-base",
     "publish": "vsce publish",
     "esbuild-watch": "npm run -S esbuild-base -- --sourcemap --watch",
