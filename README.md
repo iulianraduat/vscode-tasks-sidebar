@@ -7,6 +7,10 @@
 
 Automatically find all tasks recognized by VSCode and make them available in UI.
 
+## Sponsorship
+
+By purchasing [Coding Guidelines for React with TypeScript](https://www.amazon.com/dp/B0DD3DNDY1) from any Amazon website, you will get a set of guidelines for writing a clean, maintainable, and efficient code. Also you will sponsor me, showing your appreciation for my effort in creating and mentaining this extension.
+
 ## Features
 
 - Automatically find all tasks recognized by VSCode (inclusive from .vscode/tasks.json and package.json files)

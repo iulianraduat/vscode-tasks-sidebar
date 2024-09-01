@@ -2,7 +2,7 @@
   "name": "vscode-tasks-sidebar",
   "displayName": "VSCode Tasks in Sidebar",
   "description": "A Visual Studio Code extension to display all tasks recognized by VSCode in sidebar",
-  "version": "1.1.1",
+  "version": "1.1.2",
   "icon": "images/logo.png",
   "license": "GPL-3.0",
   "publisher": "iulian-radu-at",
@@ -15,7 +15,7 @@
     "url": "https://github.com/iulianraduat/vscode-tasks-sidebar/issues"
   },
   "sponsor": {
-    "url": "https://www.patreon.com/iulianraduat"
+    "url": "https://www.amazon.com/dp/B0DD3DNDY1"
   },
   "engines": {
     "vscode": "^1.75.0"
@@ -26,7 +26,7 @@
     "esbuild-base": "rimraf out && esbuild ./src/extension.ts --bundle --outfile=out/main.js --external:vscode --format=cjs --platform=node --target=es6",
     "esbuild": "npm run -S esbuild-base -- --sourcemap",
     "package": "vsce package",
-    "install:local": "code --install-extension vscode-tasks-sidebar-1.1.1.vsix",
+    "install:local": "code --install-extension vscode-tasks-sidebar-1.1.2.vsix --profile \"VSCode extension\"",
     "compile": "npm run esbuild-base",
     "publish": "vsce publish",
     "esbuild-watch": "npm run -S esbuild-base -- --sourcemap --watch",
@@ -37,16 +37,16 @@
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
-    "@types/node": "16.18.35",
-    "@types/uuid": "^9.0.8",
-    "@types/vscode": "1.75.0",
+    "@types/node": "16.18.106",
+    "@types/uuid": "^10.0.0",
+    "@types/vscode": "1.75.1",
     "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.62.0",
-    "@vscode/test-electron": "^2.3.9",
-    "esbuild": "^0.18.20",
-    "eslint": "^8.57.0",
-    "typescript": "^5.3.3",
-    "uuid": "^9.0.1"
+    "@typescript-eslint/parser": "^8.3.0",
+    "esbuild": "^0.23.1",
+    "eslint": "^9.9.1",
+    "rimraf": "^6.0.1",
+    "typescript": "^5.5.4",
+    "uuid": "^10.0.0"
   },
   "categories": [
     "Other"
