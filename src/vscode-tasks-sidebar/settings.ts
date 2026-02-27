@@ -5,3 +5,9 @@ export function isResultGrouped(): boolean {
     .getConfiguration()
     .get('vscodeTasksSidebar.defaultGrouped', false);
 }
+
+export function getExcludedSources(): string[] {
+  return vscode.workspace
+    .getConfiguration()
+    .get<string[]>('vscodeTasksSidebar.excludeSources', []);
+}

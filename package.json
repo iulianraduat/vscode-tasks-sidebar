@@ -119,6 +119,15 @@
             "default": false,
             "description": "VSCode Tasks in Sidebar: initially shows all results grouped (otherwise as list)",
             "scope": "resource"
+          },
+          "vscodeTasksSidebar.excludeSources": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            },
+            "default": [],
+            "description": "Hide tasks from specific sources (e.g. [\"npm\", \"gulp\"])",
+            "scope": "resource"
           }
         }
       }

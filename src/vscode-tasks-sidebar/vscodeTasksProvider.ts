@@ -1,5 +1,5 @@
 import * as vscode from 'vscode';
-import { isResultGrouped } from './settings';
+import { isResultGrouped, getExcludedSources } from './settings';
 import { VscodeGroup } from './vscodeGroup';
 import { VscodeTask } from './vscodeTask';
 
@@ -27,8 +27,15 @@ export class VscodeTasksProvider
         return;
       }
 
+      const excludedSources = getExcludedSources().map((s) => s.toLowerCase());
       const cacheTasks: VscodeTask[] = [];
       for (const task of tasks) {
+        if (
+          excludedSources.length > 0 &&
+          excludedSources.includes(task.source.toLowerCase())
+        ) {
+          continue;
+        }
         cacheTasks.push(new VscodeTask(task));
       }
       sortTasksByTypeLabel(cacheTasks);
