@@ -14,18 +14,21 @@
       "group": {
         "kind": "build",
         "isDefault": true
-      }
+      },
+      "detail": "#npm++# A special task for npm"
     },
     {
       "label": "🏃‍♂️ Run demo",
       "command": "npm",
-      "args": ["start"]
+      "args": ["start"],
+      "detail": "#Runners#"
     },
     {
       "label": "makefile-build",
       "type": "shell",
       "command": "nmake",
-      "args": ["build"]
+      "args": ["build"],
+      "detail": "#Runners#"
     },
     {
       "label": "clean",

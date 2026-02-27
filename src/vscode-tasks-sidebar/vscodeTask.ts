@@ -1,14 +1,15 @@
-import * as vscode from 'vscode';
-import { VscodeGroup } from './vscodeGroup';
-import { v4 as uuidv4 } from 'uuid';
+import * as vscode from "vscode";
+import { VscodeGroup } from "./vscodeGroup";
+import { v4 as uuidv4 } from "uuid";
 
+const reGroupName = /^#([^#]+)#\s*(.*)/;
 export class VscodeTask extends vscode.TreeItem {
   private _isRunning: boolean;
   public type: string;
 
   constructor(
     public readonly task: vscode.Task,
-    public readonly parent?: VscodeGroup
+    public readonly parent?: VscodeGroup,
   ) {
     super(task.name, vscode.TreeItemCollapsibleState.None);
     this.id = uuidv4();
@@ -16,13 +17,25 @@ export class VscodeTask extends vscode.TreeItem {
     this.description = task.source;
     this.type = task.definition.type;
     this.tooltip = task.detail;
-    this.contextValue = 'vscodeTask';
+    this.contextValue = "vscodeTask";
     this._isRunning = false;
     this.command = {
-      command: 'vscodeTasksSidebar.runTask',
-      title: 'Run this task',
+      command: "vscodeTasksSidebar.runTask",
+      title: "Run this task",
       arguments: [task],
     };
+
+    if (!task.detail) {
+      return;
+    }
+
+    const matches = reGroupName.exec(task.detail);
+    if (!matches) {
+      return;
+    }
+
+    this.type = matches[1]; // group name
+    this.tooltip = matches[2];
   }
 
   public isRunning(): boolean {
@@ -35,6 +48,6 @@ export class VscodeTask extends vscode.TreeItem {
   }
 
   private getIconPath() {
-    return this._isRunning ? 'terminal' : 'play';
+    return this._isRunning ? "terminal" : "play";
   }
 }

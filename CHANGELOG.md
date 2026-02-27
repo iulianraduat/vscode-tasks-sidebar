@@ -128,3 +128,18 @@ All notable changes to the "VSCode Tasks in Sidebar" extension will be documente
 ### Removed
 
 - Nothing
+
+## 1.3.0 (2026-02-27)
+
+### Added
+
+- Support for custom groups
+  - [closes issue #4](https://github.com/iulianraduat/vscode-tasks-sidebar/issues/4)
+
+### Changed
+
+- Nothing
+
+### Removed
+
+- Nothing

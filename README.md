@@ -28,6 +28,10 @@ If there are no tasks.json or tasks in the tasks.json, the panel will display th
 
 The task will be started using the function provided by the Visual Studio Code API for starting tasks.
 
+### Custom groups
+
+You can put a task in a custom group by adding to the task a detail using the format "#GROUP NAME# detail text". The detail text is optional.
+
 ### Screenshot
 
 Bellow you can see an example of found tasks as are they displayed by this extension:
