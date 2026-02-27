@@ -41,9 +41,16 @@ There are no special requirements.
 ## Extension Settings
 
 - vscodeTasksSidebar.defaultGrouped:
-
   - VSCode Tasks in Sidebar: initially shows all results grouped (otherwise as list)
   - default false
+
+- vscodeTasksSidebar.includeSources
+  - whitelist: only show tasks from listed sources
+  - default every
+
+- vscodeTasksSidebar.excludeSources:
+  - blacklist: hide tasks from specific sources
+  - it is applied as an additional filter after includeSources
 
 ## Known Issues
 

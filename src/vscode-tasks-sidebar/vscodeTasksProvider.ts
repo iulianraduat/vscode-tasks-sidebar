@@ -1,11 +1,11 @@
-import * as vscode from 'vscode';
-import { isResultGrouped } from './settings';
-import { VscodeGroup } from './vscodeGroup';
-import { VscodeTask } from './vscodeTask';
+import * as vscode from "vscode";
+import { getBlacklist, getWhitelist, isResultGrouped } from "./settings";
+import { VscodeGroup } from "./vscodeGroup";
+import { VscodeTask } from "./vscodeTask";
 
-export class VscodeTasksProvider
-  implements vscode.TreeDataProvider<VscodeGroup | VscodeTask>
-{
+export class VscodeTasksProvider implements vscode.TreeDataProvider<
+  VscodeGroup | VscodeTask
+> {
   private isGrouped: boolean = isResultGrouped();
   private cacheTasksList: VscodeTask[] | undefined;
   private cacheTasksGrouped: VscodeGroup[] | undefined;
@@ -27,8 +27,21 @@ export class VscodeTasksProvider
         return;
       }
 
+      const whitelist = getWhitelist();
+      const blacklist = getBlacklist();
+
       const cacheTasks: VscodeTask[] = [];
       for (const task of tasks) {
+        // we allow only what is in whitelist or every task
+        if (whitelist.length && !whitelist.includes(task.source)) {
+          continue;
+        }
+
+        // we disallow what is in blacklist or none
+        if (blacklist.length && blacklist.includes(task.source)) {
+          continue;
+        }
+
         cacheTasks.push(new VscodeTask(task));
       }
       sortTasksByTypeLabel(cacheTasks);
@@ -84,7 +97,7 @@ export class VscodeTasksProvider
     const runningTask = vscode.tasks.taskExecutions.find(
       (e) =>
         e.task.name === task.name &&
-        e.task.definition.type === task.definition.type
+        e.task.definition.type === task.definition.type,
     );
     if (runningTask !== undefined) {
       runningTask.terminate();
@@ -93,7 +106,7 @@ export class VscodeTasksProvider
 
   public findVscodeTask(task: vscode.Task): VscodeTask | undefined {
     return this.cacheTasksList?.find(
-      (cachedTask) => cachedTask.task.name === task.name
+      (cachedTask) => cachedTask.task.name === task.name,
     );
   }
 
@@ -112,10 +125,10 @@ export class VscodeTasksProvider
   }
 
   getChildren(
-    element?: VscodeGroup | VscodeTask
+    element?: VscodeGroup | VscodeTask,
   ): Thenable<Array<VscodeGroup | VscodeTask>> {
     if (element) {
-      return Promise.resolve('children' in element ? element.children : []);
+      return Promise.resolve("children" in element ? element.children : []);
     }
 
     return Promise.resolve(this.getCacheTasks() ?? []);
@@ -126,13 +139,13 @@ export class VscodeTasksProvider
   }
 
   getParent?(element: VscodeGroup | VscodeTask): VscodeGroup | undefined {
-    return 'parent' in element ? element.parent : undefined;
+    return "parent" in element ? element.parent : undefined;
   }
 
   resolveTreeItem?(
     item: vscode.TreeItem,
-    element: VscodeTask,
-    token: vscode.CancellationToken
+    _element: VscodeTask,
+    _token: vscode.CancellationToken,
   ): vscode.ProviderResult<vscode.TreeItem> {
     return item;
   }
@@ -145,16 +158,16 @@ function sortTasksByTypeLabel(tasks: VscodeTask[]) {
       return cmpType;
     }
 
-    const aLabel: string = a.label?.toString() ?? '';
-    const bLabel: string = b.label?.toString() ?? '';
+    const aLabel: string = a.label?.toString() ?? "";
+    const bLabel: string = b.label?.toString() ?? "";
     return aLabel.localeCompare(bLabel);
   });
 }
 
 function sortTasksByLabel(tasks: VscodeTask[]) {
   tasks.sort((a, b) => {
-    const aLabel: string = a.label?.toString() ?? '';
-    const bLabel: string = b.label?.toString() ?? '';
+    const aLabel: string = a.label?.toString() ?? "";
+    const bLabel: string = b.label?.toString() ?? "";
     return aLabel.localeCompare(bLabel);
   });
 }
