@@ -11,3 +11,9 @@ export function getExcludedSources(): string[] {
     .getConfiguration()
     .get<string[]>('vscodeTasksSidebar.excludeSources', []);
 }
+
+export function getIncludeSources(): string[] {
+  return vscode.workspace
+    .getConfiguration()
+    .get<string[]>('vscodeTasksSidebar.includeSources', []);
+}
