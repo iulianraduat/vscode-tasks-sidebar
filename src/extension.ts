@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { isResultGrouped } from "./vscode-tasks-sidebar/settings";
 import { VscodeTasksProvider } from "./vscode-tasks-sidebar/vscodeTasksProvider";
 
 // find-unused-exports:ignore-next-line-exports
@@ -38,6 +39,7 @@ export function activate(context: vscode.ExtensionContext) {
   const setIsGroupedContext = (isGrouped: boolean) => {
     vscode.commands.executeCommand("setContext", "isGrouped", isGrouped);
   };
+  setIsGroupedContext(isResultGrouped());
 
   context.subscriptions.push(
     vscode.commands.registerCommand("vscodeTasksSidebar.viewAsGroups", () => {
@@ -52,8 +54,6 @@ export function activate(context: vscode.ExtensionContext) {
       vscodeTasksProvider.viewAsList();
     }),
   );
-
-  setIsGroupedContext(false);
 
   vscode.tasks.onDidStartTask((e) => {
     const vscodeTask = vscodeTasksProvider.findVscodeTask(e.execution.task);

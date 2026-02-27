@@ -114,3 +114,17 @@ All notable changes to the "VSCode Tasks in Sidebar" extension will be documente
 ### Removed
 
 - Nothing
+
+## 1.2.1 (2026-02-27)
+
+### Added
+
+- Nothing
+
+### Changed
+
+- Fixed initial displayed of the show icon
+
+### Removed
+
+- Nothing
