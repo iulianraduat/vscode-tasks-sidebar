@@ -56,7 +56,7 @@
       "activitybar": [
         {
           "id": "vscodeTasksSidebar",
-          "title": "VSCode Tasks in Sidebar",
+          "title": "VSCode Tasks",
           "icon": "resources/vscode-tasks-sidebar.svg"
         }
       ]
@@ -65,7 +65,7 @@
       "vscodeTasksSidebar": [
         {
           "id": "vscodeTasksSidebar",
-          "name": "VSCode Tasks in Sidebar",
+          "name": "VSCode Tasks",
           "icon": "$(play)"
         }
       ]
