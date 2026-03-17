@@ -21,3 +21,17 @@ export function getBlacklist(): string[] {
     .split(",")
     .filter(Boolean);
 }
+
+export enum TaskSourceFilter {
+  All = "all",
+  AutoDetected = "autoDetected",
+  Workspace = "workspace",
+}
+
+export const VSCODE_WORKSPACE_SOURCE = "Workspace";
+
+export function getTaskSourceFilter(): TaskSourceFilter {
+  return vscode.workspace
+    .getConfiguration()
+    .get<TaskSourceFilter>("vscodeTasksSidebar.taskSource", TaskSourceFilter.All);
+}
