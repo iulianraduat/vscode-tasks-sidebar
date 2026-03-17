@@ -1,4 +1,5 @@
 import * as vscode from "vscode";
+import { MakefileTaskProvider } from "./vscode-tasks-sidebar/makefileTaskProvider";
 import { isResultGrouped } from "./vscode-tasks-sidebar/settings";
 import { VscodeTasksProvider } from "./vscode-tasks-sidebar/vscodeTasksProvider";
 
@@ -9,6 +10,23 @@ export function activate(context: vscode.ExtensionContext) {
     "vscodeTasksSidebar",
     vscodeTasksProvider,
   );
+
+  // Register Makefile task provider
+  context.subscriptions.push(
+    vscode.tasks.registerTaskProvider(
+      MakefileTaskProvider.type,
+      new MakefileTaskProvider(),
+    ),
+  );
+
+  // Watch for Makefile changes to auto-refresh
+  const makefileWatcher = vscode.workspace.createFileSystemWatcher(
+    "**/Makefile",
+  );
+  makefileWatcher.onDidChange(() => vscodeTasksProvider.refresh());
+  makefileWatcher.onDidCreate(() => vscodeTasksProvider.refresh());
+  makefileWatcher.onDidDelete(() => vscodeTasksProvider.refresh());
+  context.subscriptions.push(makefileWatcher);
 
   // Listen for configuration changes
   context.subscriptions.push(
