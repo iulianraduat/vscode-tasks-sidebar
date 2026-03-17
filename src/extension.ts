@@ -6,10 +6,11 @@ import { VscodeTasksProvider } from "./vscode-tasks-sidebar/vscodeTasksProvider"
 // find-unused-exports:ignore-next-line-exports
 export function activate(context: vscode.ExtensionContext) {
   const vscodeTasksProvider = new VscodeTasksProvider(context.globalState);
-  vscode.window.registerTreeDataProvider(
-    "vscodeTasksSidebar",
-    vscodeTasksProvider,
-  );
+  const treeView = vscode.window.createTreeView("vscodeTasksSidebar", {
+    treeDataProvider: vscodeTasksProvider,
+    dragAndDropController: vscodeTasksProvider,
+  });
+  context.subscriptions.push(treeView);
 
   // Listen for configuration changes
   context.subscriptions.push(
