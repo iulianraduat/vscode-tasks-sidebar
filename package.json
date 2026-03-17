@@ -90,9 +90,36 @@
         "command": "vscodeTasksSidebar.viewAsList",
         "title": "Show as list",
         "icon": "$(list-flat)"
+      },
+      {
+        "command": "vscodeTasksSidebar.openSettings",
+        "title": "Open extension settings",
+        "icon": "$(gear)"
+      },
+      {
+        "command": "vscodeTasksSidebar.pinTask",
+        "title": "Pin Task",
+        "icon": "$(pin)"
+      },
+      {
+        "command": "vscodeTasksSidebar.unpinTask",
+        "title": "Unpin Task",
+        "icon": "$(pinned)"
       }
     ],
     "menus": {
+      "view/item/context": [
+        {
+          "command": "vscodeTasksSidebar.pinTask",
+          "when": "view == vscodeTasksSidebar && viewItem == vscodeTask",
+          "group": "inline@1"
+        },
+        {
+          "command": "vscodeTasksSidebar.unpinTask",
+          "when": "view == vscodeTasksSidebar && viewItem == vscodeTaskPinned",
+          "group": "inline@1"
+        }
+      ],
       "view/title": [
         {
           "command": "vscodeTasksSidebar.viewAsGroups",

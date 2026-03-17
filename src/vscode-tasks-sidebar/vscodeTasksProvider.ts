@@ -1,7 +1,9 @@
 import * as vscode from "vscode";
 import { getBlacklist, getWhitelist, isResultGrouped } from "./settings";
 import { VscodeGroup } from "./vscodeGroup";
-import { VscodeTask } from "./vscodeTask";
+import { getStableTaskId, VscodeTask } from "./vscodeTask";
+
+const PINNED_TASKS_KEY = "vscodeTasksSidebar.pinnedTasks";
 
 export class VscodeTasksProvider implements vscode.TreeDataProvider<
   VscodeGroup | VscodeTask
@@ -9,14 +11,52 @@ export class VscodeTasksProvider implements vscode.TreeDataProvider<
   private isGrouped: boolean = isResultGrouped();
   private cacheTasksList: VscodeTask[] | undefined;
   private cacheTasksGrouped: VscodeGroup[] | undefined;
+  private globalState: vscode.Memento | undefined;
 
   private _onDidChangeTreeData: vscode.EventEmitter<VscodeTask | undefined> =
     new vscode.EventEmitter<VscodeTask | undefined>();
   public readonly onDidChangeTreeData: vscode.Event<VscodeTask | undefined> =
     this._onDidChangeTreeData.event;
 
-  constructor() {
+  constructor(globalState?: vscode.Memento) {
+    this.globalState = globalState;
     this.refresh();
+  }
+
+  private getPinnedTaskIds(): string[] {
+    return this.globalState?.get<string[]>(PINNED_TASKS_KEY, []) ?? [];
+  }
+
+  private savePinnedTaskIds(ids: string[]) {
+    this.globalState?.update(PINNED_TASKS_KEY, ids);
+  }
+
+  public pinTask(vscodeTask: VscodeTask) {
+    const pinnedIds = this.getPinnedTaskIds();
+    if (!pinnedIds.includes(vscodeTask.stableId)) {
+      pinnedIds.push(vscodeTask.stableId);
+      this.savePinnedTaskIds(pinnedIds);
+    }
+    vscodeTask.setIsPinned(true);
+    this.sortAndUpdateTree();
+  }
+
+  public unpinTask(vscodeTask: VscodeTask) {
+    const pinnedIds = this.getPinnedTaskIds().filter(
+      (id) => id !== vscodeTask.stableId,
+    );
+    this.savePinnedTaskIds(pinnedIds);
+    vscodeTask.setIsPinned(false);
+    this.sortAndUpdateTree();
+  }
+
+  private sortAndUpdateTree() {
+    if (this.cacheTasksList) {
+      sortTasksByTypeLabel(this.cacheTasksList);
+      this.rebuildGroups();
+      sortTasksByLabel(this.cacheTasksList);
+    }
+    this.updateTree();
   }
 
   public async refresh() {
@@ -30,6 +70,8 @@ export class VscodeTasksProvider implements vscode.TreeDataProvider<
       const whitelist = getWhitelist();
       const blacklist = getBlacklist();
 
+      const pinnedIds = this.getPinnedTaskIds();
+
       const cacheTasks: VscodeTask[] = [];
       for (const task of tasks) {
         // we allow only what is in whitelist or every task
@@ -42,41 +84,56 @@ export class VscodeTasksProvider implements vscode.TreeDataProvider<
           continue;
         }
 
-        cacheTasks.push(new VscodeTask(task));
+        const isPinned = pinnedIds.includes(getStableTaskId(task));
+        cacheTasks.push(new VscodeTask(task, isPinned));
       }
       sortTasksByTypeLabel(cacheTasks);
+
+      // Clean up pinned IDs for tasks that no longer exist
+      const activePinnedIds = cacheTasks
+        .filter((t) => t.isPinned())
+        .map((t) => t.stableId);
+      this.savePinnedTaskIds(activePinnedIds);
+
       resolve(cacheTasks);
     });
 
-    // The following code assume that the tasks are sorted by type (= group name)
-    let latestCacheGroup: VscodeGroup | undefined;
-    this.cacheTasksGrouped = undefined;
-    this.cacheTasksList?.forEach((cacheTask) => {
-      if (this.cacheTasksGrouped === undefined) {
-        this.cacheTasksGrouped = [];
-      }
-
-      if (latestCacheGroup === undefined) {
-        const group = new VscodeGroup(cacheTask.type);
-        group.addTask(cacheTask);
-        this.cacheTasksGrouped = [group];
-        latestCacheGroup = group;
-        return;
-      }
-
-      if (cacheTask.type !== latestCacheGroup.groupName) {
-        latestCacheGroup = new VscodeGroup(cacheTask.type);
-        this.cacheTasksGrouped.push(latestCacheGroup);
-      }
-
-      latestCacheGroup.addTask(cacheTask);
-    });
+    this.rebuildGroups();
 
     if (this.cacheTasksList) {
       sortTasksByLabel(this.cacheTasksList);
     }
 
     this.updateTree();
+  }
+
+  private rebuildGroups() {
+    this.cacheTasksGrouped = undefined;
+    if (!this.cacheTasksList || this.cacheTasksList.length === 0) {
+      return;
+    }
+
+    this.cacheTasksGrouped = [];
+
+    // Separate pinned tasks into a dedicated group at the top
+    const pinnedTasks = this.cacheTasksList.filter((t) => t.isPinned());
+    const unpinnedTasks = this.cacheTasksList.filter((t) => !t.isPinned());
+
+    if (pinnedTasks.length > 0) {
+      const pinnedGroup = new VscodeGroup("Pinned", "pinned");
+      pinnedTasks.forEach((t) => pinnedGroup.addTask(t));
+      this.cacheTasksGrouped.push(pinnedGroup);
+    }
+
+    // Build groups from unpinned tasks (assumes sorted by type)
+    let latestCacheGroup: VscodeGroup | undefined;
+    unpinnedTasks.forEach((cacheTask) => {
+      if (latestCacheGroup === undefined || cacheTask.type !== latestCacheGroup.groupName) {
+        latestCacheGroup = new VscodeGroup(cacheTask.type);
+        this.cacheTasksGrouped!.push(latestCacheGroup);
+      }
+      latestCacheGroup.addTask(cacheTask);
+    });
   }
 
   public updateTree() {
@@ -153,6 +210,11 @@ export class VscodeTasksProvider implements vscode.TreeDataProvider<
 
 function sortTasksByTypeLabel(tasks: VscodeTask[]) {
   tasks.sort((a, b) => {
+    const pinnedDiff = (b.isPinned() ? 1 : 0) - (a.isPinned() ? 1 : 0);
+    if (pinnedDiff !== 0) {
+      return pinnedDiff;
+    }
+
     const cmpType = a.type.localeCompare(b.type);
     if (cmpType !== 0) {
       return cmpType;
@@ -166,6 +228,11 @@ function sortTasksByTypeLabel(tasks: VscodeTask[]) {
 
 function sortTasksByLabel(tasks: VscodeTask[]) {
   tasks.sort((a, b) => {
+    const pinnedDiff = (b.isPinned() ? 1 : 0) - (a.isPinned() ? 1 : 0);
+    if (pinnedDiff !== 0) {
+      return pinnedDiff;
+    }
+
     const aLabel: string = a.label?.toString() ?? "";
     const bLabel: string = b.label?.toString() ?? "";
     return aLabel.localeCompare(bLabel);

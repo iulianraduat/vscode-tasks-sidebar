@@ -1,10 +1,11 @@
 import * as vscode from "vscode";
 import { isResultGrouped } from "./vscode-tasks-sidebar/settings";
+import { VscodeTask } from "./vscode-tasks-sidebar/vscodeTask";
 import { VscodeTasksProvider } from "./vscode-tasks-sidebar/vscodeTasksProvider";
 
 // find-unused-exports:ignore-next-line-exports
 export function activate(context: vscode.ExtensionContext) {
-  const vscodeTasksProvider = new VscodeTasksProvider();
+  const vscodeTasksProvider = new VscodeTasksProvider(context.globalState);
   vscode.window.registerTreeDataProvider(
     "vscodeTasksSidebar",
     vscodeTasksProvider,
@@ -55,6 +56,33 @@ export function activate(context: vscode.ExtensionContext) {
     }),
   );
 
+  context.subscriptions.push(
+    vscode.commands.registerCommand("vscodeTasksSidebar.openSettings", () => {
+      vscode.commands.executeCommand(
+        "workbench.action.openSettings",
+        "@ext:iulian-radu-at.vscode-tasks-sidebar",
+      );
+    }),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscodeTasksSidebar.pinTask",
+      (vscodeTask: VscodeTask) => {
+        vscodeTasksProvider.pinTask(vscodeTask);
+      },
+    ),
+  );
+
+  context.subscriptions.push(
+    vscode.commands.registerCommand(
+      "vscodeTasksSidebar.unpinTask",
+      (vscodeTask: VscodeTask) => {
+        vscodeTasksProvider.unpinTask(vscodeTask);
+      },
+    ),
+  );
+
   vscode.tasks.onDidStartTask((e) => {
     const vscodeTask = vscodeTasksProvider.findVscodeTask(e.execution.task);
     if (vscodeTask) {
@@ -70,6 +98,9 @@ export function activate(context: vscode.ExtensionContext) {
       vscodeTasksProvider.updateTree();
     }
   });
+
+  // Retry after a delay to catch late-loading task providers
+  setTimeout(() => vscodeTasksProvider.refresh(), 2000);
 }
 
 export function deactivate() {}
