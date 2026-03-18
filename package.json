@@ -135,6 +135,11 @@
           "command": "vscodeTasksSidebar.refresh",
           "when": "view == vscodeTasksSidebar",
           "group": "navigation@3"
+        },
+        {
+          "command": "vscodeTasksSidebar.openSettings",
+          "when": "view == vscodeTasksSidebar",
+          "group": "navigation@4"
         }
       ]
     },
