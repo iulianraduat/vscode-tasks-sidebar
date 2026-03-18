@@ -55,6 +55,15 @@ export function activate(context: vscode.ExtensionContext) {
     }),
   );
 
+  context.subscriptions.push(
+    vscode.commands.registerCommand("vscodeTasksSidebar.openSettings", () => {
+      vscode.commands.executeCommand(
+        "workbench.action.openSettings",
+        "@ext:iulian-radu-at.vscode-tasks-sidebar",
+      );
+    }),
+  );
+
   vscode.tasks.onDidStartTask((e) => {
     const vscodeTask = vscodeTasksProvider.findVscodeTask(e.execution.task);
     if (vscodeTask) {

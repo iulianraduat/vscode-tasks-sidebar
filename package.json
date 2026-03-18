@@ -90,6 +90,11 @@
         "command": "vscodeTasksSidebar.viewAsList",
         "title": "Show as list",
         "icon": "$(list-flat)"
+      },
+      {
+        "command": "vscodeTasksSidebar.openSettings",
+        "title": "Open extension settings",
+        "icon": "$(gear)"
       }
     ],
     "menus": {
@@ -108,6 +113,11 @@
           "command": "vscodeTasksSidebar.refresh",
           "when": "view == vscodeTasksSidebar",
           "group": "navigation@3"
+        },
+        {
+          "command": "vscodeTasksSidebar.openSettings",
+          "when": "view == vscodeTasksSidebar",
+          "group": "navigation@4"
         }
       ]
     },
