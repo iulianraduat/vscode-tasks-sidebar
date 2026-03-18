@@ -1,5 +1,5 @@
 import * as vscode from "vscode";
-import { getBlacklist, getWhitelist, isResultGrouped } from "./settings";
+import { getBlacklist, getTaskSourceFilter, getWhitelist, isResultGrouped, TaskSourceFilter, VSCODE_WORKSPACE_SOURCE } from "./settings";
 import { VscodeGroup } from "./vscodeGroup";
 import { getStableTaskId, VscodeTask } from "./vscodeTask";
 
@@ -349,11 +349,20 @@ export class VscodeTasksProvider
 
       const whitelist = getWhitelist();
       const blacklist = getBlacklist();
+      const taskSourceFilter = getTaskSourceFilter();
 
       const pinnedIds = this.getPinnedTaskIds();
 
       const cacheTasks: VscodeTask[] = [];
       for (const task of tasks) {
+        // filter by task origin
+        if (taskSourceFilter === TaskSourceFilter.Workspace && task.source !== VSCODE_WORKSPACE_SOURCE) {
+          continue;
+        }
+        if (taskSourceFilter === TaskSourceFilter.AutoDetected && task.source === VSCODE_WORKSPACE_SOURCE) {
+          continue;
+        }
+
         // we allow only what is in whitelist or every task
         if (whitelist.length && !whitelist.includes(task.source)) {
           continue;
