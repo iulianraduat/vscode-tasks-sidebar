@@ -164,6 +164,18 @@
             "default": "",
             "description": "VSCode Tasks in Sidebar: hide tasks from specific sources (comma-separated)",
             "scope": "resource"
+          },
+          "vscodeTasksSidebar.taskSource": {
+            "type": "string",
+            "default": "all",
+            "enum": ["all", "autoDetected", "workspace"],
+            "enumDescriptions": [
+              "Show all tasks (auto-detected and workspace)",
+              "Show only auto-detected tasks (npm, gulp, etc.)",
+              "Show only workspace tasks (defined in tasks.json)"
+            ],
+            "description": "VSCode Tasks in Sidebar: filter tasks by their origin",
+            "scope": "resource"
           }
         }
       }
