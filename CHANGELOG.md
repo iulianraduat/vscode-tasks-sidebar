@@ -157,3 +157,18 @@ All notable changes to the "VSCode Tasks in Sidebar" extension will be documente
 ### Removed
 
 - Nothing
+
+## 1.5.0 (2026-03-18)
+
+### Added
+
+- Added a toolbar button to access the settings
+- Nothing
+
+### Changed
+
+- Nothing
+
+### Removed
+
+- Nothing
