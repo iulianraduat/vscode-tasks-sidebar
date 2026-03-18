@@ -56,6 +56,14 @@ There are no special requirements.
   - blacklist: hide tasks from specific sources
   - it is applied as an additional filter after includeSources
 
+- vscodeTasksSidebar.taskSource
+  - filter tasks by origin
+    - all Show every task (current behaviour, no breaking change)
+    - autoDetected Show only tasks auto-detected by VS Code (npm, gulp, tsc…)
+    - workspace Show only tasks defined in .vscode/tasks.json
+  - it is applied before the whitelist/blacklist
+  - default all
+
 ## Known Issues
 
 None.
