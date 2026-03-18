@@ -167,7 +167,7 @@ All notable changes to the "VSCode Tasks in Sidebar" extension will be documente
   - They will be grouped at the top in their own group
 - Added support for re-ordering the tasks and groups of tasks
   - The re-ordering is preserved between VSCode restarts
-- Add setting `taskSource` to filter tasks by origin
+- Added setting `taskSource` to filter tasks by origin
 
 ### Changed
 
