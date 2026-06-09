@@ -52,6 +52,18 @@
     "Other"
   ],
   "contributes": {
+    "taskDefinitions": [
+      {
+        "type": "makefile",
+        "required": ["target"],
+        "properties": {
+          "target": {
+            "type": "string",
+            "description": "The Makefile target to run"
+          }
+        }
+      }
+    ],
     "viewsContainers": {
       "activitybar": [
         {
